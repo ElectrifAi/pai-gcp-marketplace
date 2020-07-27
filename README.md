@@ -1,3 +1,18 @@
+# Quick Notes for us
+
+## Deploy new html
+* update html in scripts/html ( right now we are just using index.html )
+* update the data to volume
+  * export environment variables
+    * export NAMESPACE=default
+    * export APP_INSTANCE_NAME=nginx-1
+  * run scripts/upload-webdata.sh 
+
+
+
+# From GCP Demo:
+
+
 # Overview
 
 NGINX is open source software that you can use as a web server, reverse proxy,
