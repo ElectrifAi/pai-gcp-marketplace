@@ -32,3 +32,5 @@ COPY --from=build /tmp/nginx.tar.gz /data/chart/
 COPY --from=build /tmp/test/nginx.tar.gz /data-test/chart/
 COPY --from=build /tmp/apptest/schema.yaml /data-test/
 COPY --from=build /tmp/schema.yaml /data/
+ENV WAIT_FOR_READY_TIMEOUT=900
+ENV TESTER_TIMEOUT=900
