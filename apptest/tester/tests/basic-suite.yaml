@@ -8,13 +8,13 @@ actions:
       bodyText:
         html:
           title:
-            exactly: 'Web Server Application'
+            exactly: 'ProcurementAi'
 - name: Site address (SSL) should be 200 OK
   bashTest:
     script: curl -k "https://${EXTERNAL_IP}"
     expect:
       stdout:
-        contains: 'Web Server Application'
+        contains: 'ProcurementAi'
       exitCode:
         equals: 0
 - name: Prometheus metrics are exported
@@ -25,7 +25,7 @@ actions:
       done
     expect:
       stdout:
-        equals: "nginx_up 1\nnginx_up 1\nnginx_up 1"
+        contains: "nginx_up 1"
 
 # Verifies that nginx configuration do not allow connection outside the localhost
 # to the /stub_status endpoint.
