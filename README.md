@@ -7,8 +7,6 @@ certificate with your own valid SSL certificate.
 
 ## Architecture
 
-![Architecture diagram](resources/nginx-k8s-app-architecture.png)
-
 This application uses NGINX to serve static web content.
 
 This application exposes two endpoints: HTTP on port 80 and HTTPS on port 443.
