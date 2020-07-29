@@ -1,8 +1,6 @@
 x-google-marketplace:
   schemaVersion: v2
-
   applicationApiVersion: v1beta1
-
   publishedVersion: "$TAG"
   publishedVersionMetadata:
     releaseNote: >-
@@ -10,14 +8,12 @@ x-google-marketplace:
     releaseTypes:
       - Feature
     recommended: false
-
   clusterConstraints:
     resources:
     - replicas: 1
       requests:
         cpu: 100m
         memory: 100Mi
-
   images:
     '':
       properties:
@@ -33,7 +29,6 @@ x-google-marketplace:
       properties:
         metrics.image:
           type: FULL
-
 properties:
   name:
     type: string
@@ -47,22 +42,8 @@ properties:
     type: integer
     title: Replicas
     description: The number of Pods run within NGINX solution
-    default: 3
+    default: 1
     minimum: 1
-  nginx.persistence.storageClass:
-    type: string
-    title: StorageClass
-    description: You can choose an existing StorageClass or create a new one.
-    x-google-marketplace:
-      type: STORAGE_CLASS
-      storageClass:
-        type: SSD
-  nginx.persistence.size:
-    type: string
-    title: Storage size for persistent volumes
-    default: "5Gi"
-    description: NGINX storage size
-    pattern: '^[1-9][0-9]*(\.[0-9]+)?[TGM]i?$'
   certificate:
     type: string
     x-google-marketplace:
@@ -76,7 +57,7 @@ properties:
     title: Enable Stackdriver Metrics Exporter For Free Curated Metrics
     description: Your GCP project should have Stackdriver enabled. Disable if you use
       non-GCP clusters, because export of metrics to Stackdriver is not supported yet.
-    default: true
+    default: false
   metrics.exporter.enabled:
     type: boolean
     title: Enable Stackdriver Metrics Exporter
@@ -88,7 +69,6 @@ properties:
     default: true
     x-google-marketplace:
       type: INGRESS_AVAILABLE
-
 required:
 - name
 - namespace
