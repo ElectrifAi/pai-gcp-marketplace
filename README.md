@@ -1,46 +1,15 @@
-# Quick Notes for us
-
-## Deploy new html
-* update html in scripts/html ( right now we are just using index.html )
-* update the data to volume
-  * export environment variables
-    * export NAMESPACE=default
-    * export APP_INSTANCE_NAME=nginx-1
-  * run scripts/upload-webdata.sh 
-
-
-
-# From GCP Demo:
-
-
 # Overview
 
-NGINX is open source software that you can use as a web server, reverse proxy,
-cache, load balancer, and for streaming media. You can also use NGINX as a proxy
-server for email (IMAP, POP3, and SMTP), and a reverse proxy and load balancer
-for HTTP, TCP, and UDP servers.
-
-To learn more about NGINX, see the [NGINX website](https://www.nginx.com/).
-
-This application uses NGINX as a web server and is configured to serve only
-static content. Each NGINX Pod is associated with its own PersistentVolume,
-which is created as a standard persistent disk defined by Google Kubernetes
-Engine.
-
-This application is pre-configured with an SSL certificate. While you are
+ProcurementAi application uses NGINX as a web server and is configured to serve only
+static content. This application is pre-configured with an SSL certificate. While you are
 installing the application using the steps below, you must replace the
 certificate with your own valid SSL certificate.
-
-## About Google Click to Deploy
-
-Popular open stacks on Kubernetes packaged by Google.
 
 ## Architecture
 
 ![Architecture diagram](resources/nginx-k8s-app-architecture.png)
 
-This application uses NGINX to serve static web content. The default
-configuration includes example content.
+This application uses NGINX to serve static web content.
 
 This application exposes two endpoints: HTTP on port 80 and HTTPS on port 443.
 
@@ -57,16 +26,13 @@ If you want to use this application in a production environment, you must:
 The steps to update the certificate for the application are in
 [Update your SSL certificate](#update-your-ssl-certificate).
 
-The steps to add content to your server are in
-[Add web content](#add-web-content).
-
 # Installation
 
 ## Quick install with Google Cloud Marketplace
 
-Get up and running with a few clicks! Install this NGINX app to a Google
+Get up and running with a few clicks! Install this ProcurementAi app to a Google
 Kubernetes Engine cluster using Google Cloud Marketplace. Follow the
-[on-screen instructions](https://console.cloud.google.com/marketplace/details/google/nginx).
+[on-screen instructions](https://console.cloud.google.com/marketplace/details/procurementai).
 
 ## Command line instructions
 
@@ -100,7 +66,7 @@ gcloud auth configure-docker
 Create a new cluster from the command line:
 
 ```shell
-export CLUSTER=nginx-cluster
+export CLUSTER=procurementai-cluster
 export ZONE=us-west1-a
 
 gcloud container clusters create "$CLUSTER" --zone "$ZONE"
@@ -117,7 +83,7 @@ gcloud container clusters get-credentials "$CLUSTER" --zone "$ZONE"
 Clone this repo and the associated tools repo.
 
 ```shell
-git clone --recursive https://github.com/GoogleCloudPlatform/click-to-deploy.git
+git clone --recursive git@github.com:ElectrifAi/pai-gcp-marketplace.git
 ```
 
 #### Install the Application resource definition
@@ -141,10 +107,10 @@ community. The source code can be found on
 
 ### Install the Application
 
-Navigate to the `nginx` directory:
+Navigate to the main directory:
 
 ```shell
-cd click-to-deploy/k8s/nginx
+cd pai-gcp-marketplace
 ```
 
 #### Configure the app with environment variables
@@ -152,22 +118,9 @@ cd click-to-deploy/k8s/nginx
 Choose the instance name and namespace for the app:
 
 ```shell
-export APP_INSTANCE_NAME=nginx-1
-export NAMESPACE=default
-export REPLICAS=3
-```
-
-For the persistent disk provisioning of the NGINX StatefulSets, you will need to:
-
- * Set the StorageClass name. Check your available options using the command below:
-   * ```kubectl get storageclass```
-   * Or check how to create a new StorageClass in [Kubernetes Documentation](https://kubernetes.io/docs/concepts/storage/storage-classes/#the-storageclass-resource)
-
- * Set the persistent disk's size. The default disk size is "1Gi".
-
-```shell
-export DEFAULT_STORAGE_CLASS="standard" # provide your StorageClass name if not "standard"
-export PERSISTENT_DISK_SIZE="1Gi"
+export APP_INSTANCE_NAME=procurementai
+export NAMESPACE=procurementai
+export REPLICAS=1
 ```
 
 Enable Stackdriver Metrics Exporter:
@@ -192,7 +145,7 @@ export METRICS_EXPORTER_ENABLED=false
 Set up the image tag:
 
 It is advised to use stable image reference which you can find on
-[Marketplace Container Registry](https://marketplace.gcr.io/google/nginx).
+[Marketplace Container Registry](https://marketplace.gcr.io/electrifai-public/procurementai).
 Example:
 
 ```shell
@@ -203,15 +156,15 @@ Alternatively you can use short tag which points to the latest image for selecte
 > Warning: this tag is not stable and referenced image might change over time.
 
 ```shell
-export TAG="1.15"
+export TAG="1.0.0"
 ```
 
 Configure the container images:
 
 ```shell
-export IMAGE_NGINX="marketplace.gcr.io/google/nginx"
-export IMAGE_NGINX_INIT="marketplace.gcr.io/google/nginx/debian9:${TAG}"
-export IMAGE_METRICS_EXPORTER="marketplace.gcr.io/google/nginx/prometheus-to-sd:${TAG}"
+export IMAGE_NGINX="marketplace.gcr.io/electrifai-public/procurementai"
+export IMAGE_NGINX_INIT="marketplace.gcr.io/electrifai-public/debian9:${TAG}"
+export IMAGE_METRICS_EXPORTER="marketplace.gcr.io/electrifai-public/prometheus-to-sd:${TAG}"
 ```
 
 #### Create TLS certificate for Nginx
@@ -296,7 +249,7 @@ In the GCP Console, do the following:
 1.  Open the
     [Kubernetes Engine Services](https://console.cloud.google.com/kubernetes/discovery)
     page.
-1.  Identify the NGINX solution using its name (typically `nginx-1-nginx-svc`)
+1.  Identify the ProcurementAi solution using its name (typically `procurementai-nginx-svc`)
 1.  From the Endpoints column, note the IP addresses for ports 80 and 443.
 
 If you are using the command line, run the following command:
@@ -351,64 +304,21 @@ You can remove existing metric descriptors using
 
 # Scaling
 
-By default, the NGINX application is deployed using 3 replicas. You can manually
+By default, the ProcurementAi application is deployed using 1 replicas. You can manually
 scale it up or down using the following command:
 
 ```shell
-kubectl scale statefulsets "$APP_INSTANCE_NAME-nginx" \
+kubectl scale deploy "$APP_INSTANCE_NAME-nginx" \
   --namespace "$NAMESPACE" \
   --replicas=[NEW_REPLICAS]
 ```
 
 where `[NEW_REPLICAS]` is the new number of replicas.
 
-# Add web content
-
-To update the content in your NGINX web server you can use the scripts in the
-`click-to-deploy/k8s/nginx/scripts` folder.
-
-Navigate to `click-to-deploy/k8s/nginx/scripts` and add your web content to the
-`html` folder. Then run the commands below.
-
-```shell
-export APP_INSTANCE_NAME=application_name  # for example, nginx-1
-export NAMESPACE=default
-./upload-webdata.sh
-```
-
-# Backup and Restore
-
-To backup and restore the content of your NGINX web server, use the scripts in
-the `click-to-deploy/k8s/nginx/scripts` folder.
-
-## Backup
-
-To back up the content of your NGINX web server, run the following command:
-
-```shell
-export APP_INSTANCE_NAME=application_name  # for example, nginx-1
-export NAMESPACE=default
-cd click-to-deploy/k8s/nginx/scripts
-./backup-webdata.sh
-```
-
-The web server content is stored in the `backup` folder.
-
-## Restore
-
-To restore the content of your NGINX web server, run the following commands:
-
-```shell
-export APP_INSTANCE_NAME=application_name  # for example, nginx-1
-export NAMESPACE=default
-cd click-to-deploy/k8s/nginx/scripts
-./upload-webdata.sh
-```
-
 # Update your SSL certificate
 
 We strongly recommend that you use a valid certificate issued by an approved
-Certificate Authority (CA) for your NGINX server.
+Certificate Authority (CA) for your ProcurementAi NGINX server.
 
 To update the certificate, you need:
 
@@ -420,17 +330,17 @@ To update the certificate, you need:
 To update the certificate for a running server:
 
 **Caution**: To avoid accidentally committing your certificate to your Git
-repository, perform these steps outside the cloned `click-to-deploy` repo.
+repository, perform these steps outside the cloned repo.
 
 1.  Save the certificate as `https1.cert` in a folder on your workstation.
 1.  Save the private key of your certificate as `https1.key` in the same folder.
 1.  Copy
-    [`click-to-deploy/k8s/nginx/scripts/nginx-update-cert.sh`](scripts/nginx-update-cert.sh)
+    [`pai-gcp-marketplace/scripts/nginx-update-cert.sh`](scripts/nginx-update-cert.sh)
     to the folder where `https1.cert` and `https1.key` are stored.
 1.  Define the `APP_INSTANCE_NAME` environment variable:
 
     ```shell
-    export APP_INSTANCE_NAME=application_name  # for example, nginx-1
+    export APP_INSTANCE_NAME=application_name  # for example, procurementai
     ```
 
 1.  Define the `NAMESPACE` environment variable:
@@ -444,32 +354,32 @@ repository, perform these steps outside the cloned `click-to-deploy` repo.
 
 If you want to create a self-signed certificate, typically used for testing, use
 the
-[`click-to-deploy/k8s/nginx/scripts/nginx-create-key.sh`](scripts/nginx-create-key.sh)
+[`pai-gcp-marketplace/scripts/nginx-create-key.sh`](scripts/nginx-create-key.sh)
 script.
 
 # Updating the application
 
-These steps assume that you have a new image for the NGINX container available
+These steps assume that you have a new image for the ProcurementAi container available
 to your Kubernetes cluster. The new image is used in the following commands as
 `[NEW_IMAGE_REFERENCE]`.
 
-In the NGINX StatefulSet, modify the image used for the Pod template:
+In the ProcurementAi Deployment, modify the image used for the Pod template:
 
 ```shell
-kubectl set image statefulset "$APP_INSTANCE_NAME-nginx" \
+kubectl set image deployment "$APP_INSTANCE_NAME-nginx" \
   --namespace "$NAMESPACE" nginx=[NEW_IMAGE_REFERENCE]
 ```
 
 where `[NEW_IMAGE_REFERENCE]` is the new image.
 
-To check the status of Pods in the StatefulSet, and the progress of deploying
+To check the status of Pods in the Deployment, and the progress of deploying
 the new image, run the following command:
 
 ```shell
 kubectl get pods -l app.kubernetes.io/name=$APP_INSTANCE_NAME --namespace "$NAMESPACE"
 ```
 
-To check the current image used by Pods in the `NGINX` Kubernetes application,
+To check the current image used by Pods in the `ProcurementAi` Kubernetes application,
 run the following command:
 
 ```shell
@@ -478,7 +388,7 @@ kubectl get pods -l app.kubernetes.io/name=$APP_INSTANCE_NAME --namespace "$NAME
 
 # Uninstalling the app
 
-You can delete the NGINX application using the Google Cloud Platform Console, or
+You can delete the ProcurementAi application using the Google Cloud Platform Console, or
 using the command line.
 
 ## Using the Google Cloud Platform Console
@@ -486,16 +396,16 @@ using the command line.
 1.  In the GCP Console, open
     [Kubernetes Applications](https://console.cloud.google.com/kubernetes/application).
 
-1.  From the list of applications, click **NGINX**.
+1.  From the list of applications, click **ProcurementAi**.
 
 1.  On the Application Details page, click **Delete**.
 
 ## Using the command line
 
-1.  Navigate to the `nginx` directory.
+1.  Navigate to the main directory.
 
     ```shell
-    cd click-to-deploy/k8s/nginx
+    cd pai-gcp-marketplace
     ```
 
 1.  Run the `kubectl delete` command:
