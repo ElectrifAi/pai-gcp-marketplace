@@ -30,14 +30,14 @@ The steps to update the certificate for the application are in
 
 Get up and running with a few clicks! Install this ProcurementAi app to a Google
 Kubernetes Engine cluster using Google Cloud Marketplace. Follow the
-[on-screen instructions](https://console.cloud.google.com/marketplace/details/procurementai).
+[on-screen instructions](https://console.cloud.google.com/marketplace/details/electrifai-public/procurementai).
 
 ## Command line instructions
 
 You can use [Google Cloud Shell](https://cloud.google.com/shell/) or a local
 workstation to complete the following steps.
 
-[![Open in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/click-to-deploy&cloudshell_open_in_editor=README.md&cloudshell_working_dir=k8s/nginx)
+[![Open in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/ElectrifAi/pai-gcp-marketplace.git&cloudshell_open_in_editor=README.md)
 
 ### Prerequisites
 
@@ -142,16 +142,7 @@ export METRICS_EXPORTER_ENABLED=false
 
 Set up the image tag:
 
-It is advised to use stable image reference which you can find on
-[Marketplace Container Registry](https://marketplace.gcr.io/electrifai-public/procurementai).
-Example:
-
-```shell
-export TAG="<BUILD_ID>"
-```
-
-Alternatively you can use short tag which points to the latest image for selected version.
-> Warning: this tag is not stable and referenced image might change over time.
+You can use a tag which points to the latest image for selected version.
 
 ```shell
 export TAG="1.0.0"
@@ -165,7 +156,7 @@ export IMAGE_NGINX_INIT="marketplace.gcr.io/electrifai-public/debian9:${TAG}"
 export IMAGE_METRICS_EXPORTER="marketplace.gcr.io/electrifai-public/prometheus-to-sd:${TAG}"
 ```
 
-#### Create TLS certificate for Nginx
+#### Create TLS certificate for ProcurementAi Nginx service
 
 1.  If you already have a certificate that you want to use, copy your
     certificate and key pair to the `/tmp/tls.crt`, and `/tmp/tls.key` files,
@@ -239,7 +230,7 @@ To view your app, open the URL in your browser.
 
 # Using the app
 
-You can get the IP addresses for your NGINX solution either from the command
+You can get the IP addresses for your ProcuremNGINX solution either from the command
 line, or from the Google Cloud Platform Console.
 
 In the GCP Console, do the following:
@@ -256,7 +247,7 @@ If you are using the command line, run the following command:
 kubectl get svc -l app.kubernetes.io/name=$APP_INSTANCE_NAME --namespace "$NAMESPACE"
 ```
 
-This command shows the internal and external IP address of your NGINX service.
+This command shows the internal and external IP address of your ProcurementAi NGINX service.
 
 # Application metrics
 
