@@ -5,7 +5,7 @@ metadata:
   annotations:
     kubernetes-engine.cloud.google.com/icon: >-
       data:image/png;base64,{{ .Files.Get "ElectrifAi_Logo_200px.png" | b64enc }}
-    marketplace.cloud.google.com/deploy-info: '{"partner_id": "click-to-deploy-containers", "product_id": "nginx", "partner_name": "Google Click to Deploy"}'
+    marketplace.cloud.google.com/deploy-info: '{"partner_id": "electrifai-public", "product_id": "procurementai", "partner_name": "ElectrifAi"}'
   labels:
     app.kubernetes.io/name: "{{ .Release.Name }}"
 spec:
