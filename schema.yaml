@@ -4,7 +4,7 @@ x-google-marketplace:
   publishedVersion: "$TAG"
   publishedVersionMetadata:
     releaseNote: >-
-      A regular update.
+      A first release.
     releaseTypes:
       - Feature
     recommended: false
